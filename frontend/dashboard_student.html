@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - Quiz Master</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --jambhala-purple: #7c3aed;
+      --jambhala-blue: #3b82f6;
+      --jambhala-cyan: #06b6d4;
+      --jambhala-violet: #a78bfa;
+      --jambhala-indigo: #4f46e5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+
+    @keyframes gradientShift {
+      0% { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); }
+      25% { background: linear-gradient(135deg, #764ba2 0%, #f093fb 50%, #4facfe 100%); }
+      50% { background: linear-gradient(135deg, #f093fb 0%, #4facfe 50%, #667eea 100%); }
+      75% { background: linear-gradient(135deg, #4facfe 0%, #667eea 50%, #764ba2 100%); }
+      100% { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); }
+    }
+
+    .header-section {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 255, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 40px 30px;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      animation: slideDown 0.8s ease-out;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header-content {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .welcome-emoji {
+      font-size: 2.5rem;
+      display: inline-block;
+      margin-bottom: 15px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    #welcomeText {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #4b5563;
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .btn-logout {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-logout:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(239, 68, 68, 0.5);
+    }
+
+    .stats-section {
+      margin-bottom: 40px;
+      animation: slideUp 0.8s ease-out 0.2s both;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 255, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: slideUp 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.3s; }
+    .stat-card:nth-child(2) { animation-delay: 0.4s; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stat-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      color: #4b5563;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 30px;
+      animation: slideUp 0.8s ease-out 0.6s both;
+    }
+
+    .quiz-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 255, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-bottom: 25px;
+      animation: slideUp 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    .quiz-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(124, 58, 237, 0.2);
+      border-color: var(--jambhala-purple);
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 20px;
+      gap: 20px;
+    }
+
+    .quiz-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--jambhala-purple);
+      margin: 0;
+    }
+
+    .quiz-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(79, 70, 229, 0.1));
+      color: var(--jambhala-purple);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-submitted {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(4, 120, 87, 0.1));
+      color: #047857;
+    }
+
+    .quiz-description {
+      color: #4b5563;
+      font-size: 1rem;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .quiz-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .info-item {
+      background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+      padding: 15px;
+      border-radius: 12px;
+      border-left: 4px solid var(--jambhala-purple);
+    }
+
+    .info-label {
+      color: #6b7280;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      color: var(--jambhala-purple);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .time-remaining {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .time-available {
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .time-warning {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+      animation: pulse 1s infinite;
+    }
+
+    .time-expired {
+      background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+    }
+
+    .btn-start, .btn-edit {
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 14px 30px;
+      border-radius: 12px;
+      width: 100%;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+    }
+
+    .btn-edit {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-start:hover, .btn-edit:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(124, 58, 237, 0.5);
+    }
+
+    .btn-disabled {
+      background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+      cursor: not-allowed;
+      box-shadow: 0 5px 20px rgba(107, 114, 128, 0.2);
+    }
+
+    .btn-disabled:hover {
+      transform: none;
+      box-shadow: 0 5px 20px rgba(107, 114, 128, 0.2);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 30px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 255, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      animation: slideUp 0.8s ease-out 0.6s both;
+    }
+
+    .empty-state .emoji {
+      font-size: 4rem;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+      color: var(--jambhala-purple);
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .empty-state p {
+      color: #4b5563;
+      font-size: 1.1rem;
+    }
+
+    .error-details {
+      background: rgba(239, 68, 68, 0.1);
+      border: 2px solid #ef4444;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      color: #dc2626;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    .loading-text {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--jambhala-purple);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .header-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 25px 20px;
+      }
+      #welcomeText {
+        font-size: 1.5rem;
+      }
+      .quiz-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-section">
+    <div class="header-content">
+      <div class="welcome-emoji">👨‍🎓</div>
+      <h2 id="welcomeText">Student Dashboard</h2>
+      <p class="subtitle">Ready to test your knowledge?</p>
+    </div>
+    <button class="btn-logout" onclick="logout()">← Logout</button>
+  </div>
+
+  <div class="stats-section">
+    <div class="row" id="quizStats">
+      <div class="col-md-6 mb-3">
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-number" id="availableQuizzes">0</div>
+          <div class="stat-label">Available Quizzes</div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-number" id="completedQuizzes">0</div>
+          <div class="stat-label">Completed Quizzes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid px-md-4">
+    <h1 class="section-title">📋 Available Quizzes</h1>
+    <div id="quizzesContainer" class="loading-text">Loading quizzes...</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
+
+    if (!user || user.role !== 'Student') {
+      alert('❌ Access denied! Only Students can access this page.');
+      window.location.href = 'login.html';
+    }
+
+    document.getElementById('welcomeText').textContent = `Welcome, ${user.name}!`;
+
+    async function loadStats() {
+      try {
+        const response = await fetch('http://localhost:3000/api/quiz/student-stats', {
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const stats = await response.json();
+          document.getElementById('availableQuizzes').textContent = stats.availableQuizzes;
+          document.getElementById('completedQuizzes').textContent = stats.completedQuizzes;
+        }
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+
+    async function loadAvailableQuizzes() {
+      try {
+        console.log('Fetching quizzes...');
+        
+        const response = await fetch('http://localhost:3000/api/quiz/available', {
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error response:', errorText);
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        const quizzes = await response.json();
+        console.log('Received quizzes:', quizzes);
+        
+        const container = document.getElementById('quizzesContainer');
+
+        if (quizzes.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="emoji">📭</div>
+              <h3>No Quizzes Available</h3>
+              <p>Check back later for new quizzes to take!</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = quizzes.map((quiz, index) => {
+          const now = new Date();
+          const endTime = new Date(quiz.endTime);
+          const timeLeftMs = endTime - now;
+          const timeLeft = Math.max(0, Math.floor(timeLeftMs / 1000 / 60));
+
+          let timeDisplay = '';
+          let timeClass = 'time-available';
+
+          if (timeLeft > 60) {
+            const hours = Math.floor(timeLeft / 60);
+            const mins = timeLeft % 60;
+            timeDisplay = `${hours}h ${mins}m left`;
+          } else if (timeLeft > 0) {
+            timeDisplay = `${timeLeft}m left`;
+            if (timeLeft < 30) {
+              timeClass = 'time-warning';
+              timeDisplay += ' ⚠️';
+            }
+          } else {
+            timeDisplay = 'Expired';
+            timeClass = 'time-expired';
+          }
+
+          const buttonHtml = quiz.hasSubmitted 
+            ? `<button class="btn-edit" onclick="attemptQuiz('${quiz._id}', true)">✏️ Edit Submission</button>`
+            : (timeLeft > 0 
+                ? `<button class="btn-start" onclick="attemptQuiz('${quiz._id}', false)">🚀 Start Quiz Now</button>`
+                : `<button class="btn-start btn-disabled" disabled>⏳ Quiz Ended</button>`);
+
+          return `
+            <div class="quiz-card" style="animation-delay: ${index * 0.1}s">
+              <div class="quiz-header">
+                <div>
+                  <h5 class="quiz-title">📝 ${quiz.subject || 'Quiz'}</h5>
+                </div>
+                <span class="quiz-badge ${quiz.hasSubmitted ? 'badge-submitted' : ''}">
+                  ${quiz.hasSubmitted ? '✅ Submitted' : 'Not Started'}
+                </span>
+              </div>
+
+              <p class="quiz-description">${quiz.description || 'No description available'}</p>
+
+              <div class="quiz-info">
+                <div class="info-item">
+                  <div class="info-label">📝 Questions</div>
+                  <div class="info-value">${quiz.questions?.length || 0}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">👨‍🏫 Created By</div>
+                  <div class="info-value">${quiz.creatorName || 'Unknown'}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">⏱️ Time Left</div>
+                  <div class="info-value"><span class="time-remaining ${timeClass}">${timeDisplay}</span></div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">📅 Ends</div>
+                  <div class="info-value">${endTime.toLocaleDateString()}</div>
+                </div>
+              </div>
+
+              ${buttonHtml}
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading quizzes:', error);
+        document.getElementById('quizzesContainer').innerHTML = `
+          <div class="empty-state">
+            <div class="emoji">❌</div>
+            <h3>Error Loading Quizzes</h3>
+            <p>There was a problem fetching the quizzes.</p>
+            <div class="error-details">
+              <strong>Error:</strong> ${error.message}<br><br>
+              <strong>Troubleshooting:</strong><br>
+              • Check if backend server is running on port 3000<br>
+              • Open browser console (F12) for details<br>
+              • Verify API endpoint: /api/quiz/available
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function attemptQuiz(quizId, isEdit) {
+      const message = isEdit 
+        ? '✏️ Edit your previous submission? Your new score will replace the old one!'
+        : '🚀 Ready to start this quiz? Make sure you have enough time!';
+      
+      if (confirm(message)) {
+        window.location.href = `quiz.html?quizId=${quizId}`;
+      }
+    }
+
+    function logout() {
+      if (confirm('👋 Are you sure you want to logout?')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+      }
+    }
+
+    loadStats();
+    loadAvailableQuizzes();
+    setInterval(() => {
+      loadStats();
+      loadAvailableQuizzes();
+    }, 60000);
+  </script>
+</body>
+</html>

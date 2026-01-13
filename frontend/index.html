@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz App - Welcome</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --jambhala-purple: #6c1bf8;
+      --jambhala-blue: #8db9ff;
+      --jambhala-cyan: #063690;
+      --jambhala-violet: #a78bfa;
+      --jambhala-indigo: #4f46e5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated Gradient Background */
+    @keyframes gradientShift {
+      0% {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #c849d6 100%);
+        background-size: 400% 400%;
+      }
+      25% {
+        background: linear-gradient(135deg, #764ba2 0%, #f093fb 50%, #4facfe 100%);
+        background-size: 400% 400%;
+      }
+      50% {
+        background: linear-gradient(135deg, #f093fb 0%, #4facfe 50%, #667eea 100%);
+        background-size: 400% 400%;
+      }
+      75% {
+        background: linear-gradient(135deg, #4facfe 0%, #667eea 50%, #764ba2 100%);
+        background-size: 400% 400%;
+      }
+      100% {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background-size: 400% 400%;
+      }
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      position: relative;
+    }
+
+    /* Animated Particles Background */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: float 20s infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+      }
+    }
+
+    /* Main Container */
+    .main-container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Content Card */
+    .content-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 255, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 30px;
+      padding: 60px 40px;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Title */
+    .title {
+      font-size: 4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      animation: titleSlide 0.8s ease-out 0.2s both;
+      letter-spacing: -1px;
+    }
+
+    @keyframes titleSlide {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--jambhala-purple);
+      margin-bottom: 30px;
+      animation: subtitleSlide 0.8s ease-out 0.4s both;
+    }
+
+    @keyframes subtitleSlide {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Description Lines */
+    .description {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #4b5563;
+      margin-bottom: 40px;
+      font-weight: 500;
+    }
+
+    /* Animated Description Words */
+    .word {
+      display: inline;
+      animation: wordFade 0.5s ease-out forwards;
+      opacity: 0;
+      margin-right: 4px;
+    }
+
+    @keyframes wordFade {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Button Container */
+    .button-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 50px;
+      animation: buttonsSlide 0.8s ease-out 2.5s both;
+      flex-wrap: wrap;
+    }
+
+    @keyframes buttonsSlide {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Primary Button */
+    .btn-enter {
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 16px 50px;
+      font-size: 1.1rem;
+      border-radius: 15px;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+      cursor: pointer;
+    }
+
+    .btn-enter::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-enter:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-enter:hover {
+      transform: translateY(-5px) scale(1.08);
+      box-shadow: 0 20px 50px rgba(124, 58, 237, 0.5);
+    }
+
+    /* Secondary Button */
+    .btn-learn {
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 16px 50px;
+      font-size: 1.1rem;
+      border-radius: 15px;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+      cursor: pointer;
+    }
+
+    .btn-learn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-learn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-learn:hover {
+      transform: translateY(-5px) scale(1.08);
+      box-shadow: 0 20px 50px rgba(16, 185, 129, 0.5);
+    }
+
+    /* Icon Animation */
+    .emoji {
+      display: inline-block;
+      animation: bounce 2s ease-in-out infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .title {
+        font-size: 2.5rem;
+      }
+
+      .subtitle {
+        font-size: 1.3rem;
+      }
+
+      .description {
+        font-size: 1rem;
+      }
+
+      .content-card {
+        padding: 40px 25px;
+      }
+
+      .button-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-enter, .btn-learn {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+
+    /* Text Glow Effect */
+    .glow-text {
+      text-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+    }
+
+    /* Shine Effect */
+    .shine {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shine::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Particles Background -->
+  <div class="particles" id="particlesContainer"></div>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Content Card -->
+    <div class="content-card shine">
+      <!-- Title with Icon -->
+      <h1 class="title glow-text">
+        <span class="emoji">🎓</span>Quiz Master
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="subtitle">Welcome to Your Learning Adventure</p>
+
+      <!-- Description with Word-by-Word Animation -->
+      <p class="description" id="descriptionText">
+        Welcome to Quiz Master! Create engaging quizzes or test your knowledge.
+        <br><br>
+        Let's get started on your learning journey!
+      </p>
+
+      <!-- Button Container -->
+      <div class="button-container">
+        <button class="btn-enter" onclick="enterApp()">
+          <span class="emoji">🚀</span> Enter App
+        </button>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Generate animated particles
+    function generateParticles() {
+      const container = document.getElementById('particlesContainer');
+      const particleCount = 50;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.delay = Math.random() * 20 + 's';
+        particle.style.opacity = Math.random() * 0.5 + 0.3;
+        particle.style.animation = `float ${20 + Math.random() * 10}s linear infinite`;
+        container.appendChild(particle);
+      }
+    }
+
+    // Animate description text word by word
+    function animateDescriptionText() {
+      const textElement = document.getElementById('descriptionText');
+      const text = textElement.textContent;
+      
+      // Clear the element
+      textElement.innerHTML = '';
+      
+      // Split text into words and line breaks
+      const words = text.split(/(\s+|<br>)/);
+      let delay = 0.6;
+
+      words.forEach((word, index) => {
+        if (word.includes('<br>')) {
+          textElement.innerHTML += '<br>';
+        } else if (word.trim()) {
+          const span = document.createElement('span');
+          span.className = 'word';
+          span.textContent = word;
+          span.style.animationDelay = delay + 's';
+          textElement.appendChild(span);
+          delay += 0.08; // Stagger each word
+        } else if (word === ' ') {
+          textElement.innerHTML += ' ';
+        }
+      });
+    }
+
+    // Initialize
+    window.addEventListener('load', () => {
+      generateParticles();
+      animateDescriptionText();
+    });
+
+    // Button Functions
+    function enterApp() {
+      window.location.href = 'login.html';
+    }
+
+    function scrollToInfo() {
+      alert('Learn More coming soon!');
+    }
+  </script>
+</body>
+</html>

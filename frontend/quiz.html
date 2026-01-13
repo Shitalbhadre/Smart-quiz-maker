@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Take Quiz - Quiz Master</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --jambhala-purple: #7c3aed;
+      --jambhala-blue: #3b82f6;
+      --jambhala-cyan: #06b6d4;
+      --jambhala-violet: #a78bfa;
+      --jambhala-indigo: #4f46e5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      min-height: 100vh;
+      padding: 20px 0;
+    }
+
+    /* Animated Gradient Background */
+    @keyframes gradientShift {
+      0% {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      }
+      25% {
+        background: linear-gradient(135deg, #764ba2 0%, #f093fb 50%, #4facfe 100%);
+      }
+      50% {
+        background: linear-gradient(135deg, #f093fb 0%, #4facfe 50%, #667eea 100%);
+      }
+      75% {
+        background: linear-gradient(135deg, #4facfe 0%, #667eea 50%, #764ba2 100%);
+      }
+      100% {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      }
+    }
+
+    /* Quiz Header Container */
+    .quiz-header {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 255, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      animation: slideDown 0.8s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #quizTitle {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    #quizDescription {
+      color: #4b5563;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    /* Timer Container */
+    .timer-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    /* Timer styling */
+    #timer {
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      color: white !important;
+      border: none !important;
+      border-radius: 12px;
+      padding: 15px 25px !important;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+      transition: all 0.3s ease;
+      animation: slideIn 0.6s ease-out 0.2s both;
+    }
+
+    #timer:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+    }
+
+    .timer-warning {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+      animation: pulse 1s infinite;
+      box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4) !important;
+    }
+
+    .timer-critical {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+      animation: pulse 0.5s infinite;
+      box-shadow: 0 5px 20px rgba(239, 68, 68, 0.5) !important;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.02); }
+    }
+
+    /* Question Counter */
+    #questionCounter {
+      color: var(--jambhala-purple);
+      font-size: 1.1rem;
+      animation: slideIn 0.6s ease-out 0.3s both;
+    }
+
+    /* Progress Bar Container */
+    .progress {
+      background: rgba(255, 255, 255, 0.3);
+      height: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.6s ease-out 0.4s both;
+    }
+
+    /* Progress fill styling */
+    .progress-fill {
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-blue) 50%, var(--jambhala-indigo) 100%);
+      transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+    }
+
+    /* Main Container */
+    .main-container {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 255, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      animation: slideUp 0.8s ease-out 0.5s both;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Questions Container */
+    #questionsContainer {
+      animation: slideUp 0.8s ease-out 0.6s both;
+    }
+
+    /* Question Card */
+    .question-card {
+      background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+      border: 2px solid var(--jambhala-violet);
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .question-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(124, 58, 237, 0.2);
+      border-color: var(--jambhala-purple);
+    }
+
+    .question-number {
+      color: var(--jambhala-purple);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(79, 70, 229, 0.1));
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+
+    .question-text {
+      color: #2d3748;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    /* Options Container */
+    .options-container {
+      display: grid;
+      gap: 15px;
+    }
+
+    /* Option Button */
+    .option {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: left;
+      font-weight: 500;
+      color: #4b5563;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .option:hover {
+      border-color: var(--jambhala-purple);
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(79, 70, 229, 0.05));
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(124, 58, 237, 0.15);
+    }
+
+    .option:hover::before {
+      left: 100%;
+    }
+
+    /* Selected option highlight */
+    .option.selected {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(79, 70, 229, 0.15) 100%);
+      border-color: var(--jambhala-purple);
+      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+      transform: scale(1.02);
+      font-weight: 700;
+      color: var(--jambhala-purple);
+    }
+
+    .option.selected::after {
+      content: '✓';
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--jambhala-purple);
+      font-size: 1.3rem;
+      font-weight: 800;
+      animation: checkmark 0.4s ease-out;
+    }
+
+    @keyframes checkmark {
+      from {
+        opacity: 0;
+        transform: translateY(-50%) scale(0);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+      }
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 16px 40px;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      width: 100%;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+      animation: slideUp 0.8s ease-out 0.7s both;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-submit:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 20px 50px rgba(124, 58, 237, 0.5);
+    }
+
+    .btn-submit:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* Message Alert */
+    #message {
+      margin-top: 20px;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    .text-success {
+      color: #059669 !important;
+      font-weight: 600;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+      padding: 15px 20px;
+      border-radius: 10px;
+      border-left: 4px solid #10b981;
+    }
+
+    .text-danger {
+      color: #dc2626 !important;
+      font-weight: 600;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+      padding: 15px 20px;
+      border-radius: 10px;
+      border-left: 4px solid #ef4444;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .quiz-header {
+        padding: 20px;
+      }
+
+      #quizTitle {
+        font-size: 1.8rem;
+      }
+
+      .main-container {
+        padding: 20px;
+      }
+
+      .question-card {
+        padding: 20px;
+      }
+
+      .timer-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #timer {
+        text-align: center;
+      }
+    }
+
+    /* Loading Spinner */
+    .spinner-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+    }
+
+    .spinner-border {
+      color: var(--jambhala-purple);
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Quiz Header -->
+  <div class="container-fluid">
+    <div class="quiz-header">
+      <h2 id="quizTitle">📝 Quiz</h2>
+      <p id="quizDescription"></p>
+    </div>
+
+    <!-- Timer and Counter -->
+    <div class="container mb-4">
+      <div class="timer-container">
+        <div class="alert alert-success" id="timer">⏱️ Time Remaining: Loading...</div>
+        <div class="fw-bold text-center" id="questionCounter">Question 0 of 0</div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress mb-4">
+        <div class="progress-fill progress-bar" id="progressFill" role="progressbar" style="width: 0%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container mb-4">
+    <div class="main-container">
+      <div id="questionsContainer"></div>
+
+      <!-- Submit Button -->
+      <button class="btn-submit" onclick="submitQuiz()">
+        <span class="emoji">🚀</span> Submit Quiz
+      </button>
+
+      <!-- Message -->
+      <div id="message" class="text-center"></div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
+    const urlParams = new URLSearchParams(window.location.search);
+    const quizId = urlParams.get('quizId');
+
+    if (!user || !token || !quizId) {
+      alert('Invalid access. Please login first.');
+      window.location.href = 'login.html';
+    }
+
+    let quiz = null;
+    let answers = [];
+    let timerInterval = null;
+    let timeRemaining = 0;
+
+    async function loadQuiz() {
+      try {
+        const res = await fetch(`http://localhost:3000/api/quiz/${quizId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        
+        if (res.ok) {
+          quiz = data;
+          document.getElementById('quizTitle').textContent = `📝 ${quiz.subject}`;
+          document.getElementById('quizDescription').textContent = quiz.description;
+          
+          displayQuestions();
+          startTimer();
+        } else {
+          document.getElementById('questionsContainer').innerHTML = `<p class="text-danger">❌ Failed to load quiz: ${data.error}</p>`;
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById('questionsContainer').innerHTML = '<p class="text-danger">❌ Connection error. Please refresh the page.</p>';
+      }
+    }
+
+    function displayQuestions() {
+      const container = document.getElementById('questionsContainer');
+      
+      container.innerHTML = quiz.questions.map((q, index) => `
+        <div class="question-card" style="animation-delay: ${index * 0.1}s">
+          <span class="question-number">Question ${index + 1}</span>
+          <h5 class="question-text">❓ ${q.question}</h5>
+          <div class="options-container">
+            ${q.options.map((option, optIndex) => `
+              <div class="option" onclick="selectOption(${index}, ${optIndex})">
+                ${option}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      answers = new Array(quiz.questions.length).fill(null);
+      updateProgress();
+    }
+
+    function selectOption(questionIndex, optionIndex) {
+      answers[questionIndex] = optionIndex;
+      
+      const questionCard = document.querySelectorAll('.question-card')[questionIndex];
+      const options = questionCard.querySelectorAll('.option');
+      
+      options.forEach((opt, idx) => {
+        opt.classList.remove('selected');
+        if (idx === optionIndex) {
+          opt.classList.add('selected');
+        }
+      });
+      
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const answeredCount = answers.filter(a => a !== null).length;
+      const total = quiz.questions.length;
+      const percentage = (answeredCount / total) * 100;
+      
+      document.getElementById('progressFill').style.width = percentage + '%';
+      document.getElementById('questionCounter').textContent = `Question ${answeredCount} of ${total} answered`;
+    }
+
+    function startTimer() {
+      const startTime = new Date(quiz.startTime);
+      const endTime = new Date(quiz.endTime);
+      const totalTime = (endTime - startTime) / 1000;
+      
+      timeRemaining = totalTime;
+      
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        
+        const hours = Math.floor(timeRemaining / 3600);
+        const minutes = Math.floor((timeRemaining % 3600) / 60);
+        const seconds = Math.floor(timeRemaining % 60);
+        
+        const timerElement = document.getElementById('timer');
+        timerElement.textContent = `⏱️ Time Remaining: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        
+        if (timeRemaining <= 60) {
+          timerElement.classList.add('timer-critical');
+          timerElement.classList.remove('timer-warning');
+        } else if (timeRemaining <= 300) {
+          timerElement.classList.add('timer-warning');
+          timerElement.classList.remove('timer-critical');
+        }
+        
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          submitQuiz();
+        }
+      }, 1000);
+    }
+
+ async function submitQuiz() {
+    clearInterval(timerInterval);
+    
+    const submitBtn = document.querySelector('.btn-submit');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Submitting...';
+
+    try {
+        // Map the answers to match what your backend expects
+        const formattedAnswers = answers.map((answerIndex, qIndex) => ({
+            questionIndex: qIndex,
+            selectedOption: answerIndex !== null ? quiz.questions[qIndex].options[answerIndex] : null
+        }));
+
+        const res = await fetch('http://localhost:3000/api/answer/submit', { // ADDED /submit
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                quizId: quizId,
+                answers: formattedAnswers
+            })
+        });
+
+        const data = await res.json();
+        
+        if (res.ok) {
+            document.getElementById('message').innerHTML = `
+                <div class="alert alert-success">
+                    ✅ Quiz submitted successfully! <br>
+                   
+                </div>`;
+            setTimeout(() => { window.location.href = 'dashboard_student.html'; }, 3000);
+        } else {
+            document.getElementById('message').innerHTML = `<p class="text-danger">❌ ${data.error || 'Submission failed'}</p>`;
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '🚀 Submit Quiz';
+        }
+    } catch (error) {
+        console.error("Fetch error:", error);
+        document.getElementById('message').innerHTML = '<p class="text-danger">❌ Connection error to server.</p>';
+        submitBtn.disabled = false;
+    }
+}
+
+    window.addEventListener('beforeunload', function(e) {
+      if (quiz && answers.filter(a => a !== null).length > 0) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    loadQuiz();
+  </script>
+</body>
+</html>

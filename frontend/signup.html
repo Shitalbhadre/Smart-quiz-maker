@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Quiz Master</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --jambhala-purple: #7c3aed;
+      --jambhala-blue: #3b82f6;
+      --jambhala-cyan: #06b6d4;
+      --jambhala-violet: #a78bfa;
+      --jambhala-indigo: #4f46e5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated Gradient Background */
+    @keyframes gradientShift {
+      0% {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background-size: 400% 400%;
+      }
+      25% {
+        background: linear-gradient(135deg, #764ba2 0%, #f093fb 50%, #4facfe 100%);
+        background-size: 400% 400%;
+      }
+      50% {
+        background: linear-gradient(135deg, #f093fb 0%, #4facfe 50%, #667eea 100%);
+        background-size: 400% 400%;
+      }
+      75% {
+        background: linear-gradient(135deg, #4facfe 0%, #667eea 50%, #764ba2 100%);
+        background-size: 400% 400%;
+      }
+      100% {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background-size: 400% 400%;
+      }
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      position: relative;
+    }
+
+    /* Animated Particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: float 20s infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+      }
+    }
+
+    /* Main Container */
+    .signup-container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Signup Card */
+    .signup-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 255, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 30px;
+      padding: 50px 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header */
+    .signup-header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: slideDown 0.8s ease-out 0.2s both;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .signup-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .signup-header p {
+      color: #4b5563;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .signup-header .emoji {
+      display: inline-block;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Form Group */
+    .form-group {
+      margin-bottom: 25px;
+      animation: slideIn 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.3s; }
+    .form-group:nth-child(2) { animation-delay: 0.4s; }
+    .form-group:nth-child(3) { animation-delay: 0.5s; }
+    .form-group:nth-child(4) { animation-delay: 0.6s; }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Form Label */
+    .form-label {
+      color: var(--jambhala-purple);
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-label .icon {
+      font-size: 1.2rem;
+    }
+
+    /* Form Controls */
+    .form-control, .form-select {
+      border: 2px solid #e5e7eb !important;
+      border-radius: 12px !important;
+      padding: 12px 15px !important;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: rgba(255, 255, 255, 0.8) !important;
+      color: #2d3748;
+    }
+
+    .form-control::placeholder {
+      color: #9ca3af;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--jambhala-purple) !important;
+      box-shadow: 0 0 0 0.3rem rgba(124, 58, 237, 0.25) !important;
+      transform: translateY(-3px);
+      background: white !important;
+    }
+
+    .form-control:hover {
+      border-color: var(--jambhala-violet) !important;
+    }
+
+    /* Password Toggle */
+    .password-toggle {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 45px;
+      cursor: pointer;
+      color: var(--jambhala-purple);
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-password:hover {
+      transform: scale(1.2);
+    }
+
+    /* Signup Button */
+    .btn-signup {
+      background: linear-gradient(135deg, var(--jambhala-purple) 0%, var(--jambhala-indigo) 100%);
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 14px 30px;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+      animation: slideIn 0.6s ease-out 0.7s both;
+    }
+
+    .btn-signup::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-signup:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-signup:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 20px 50px rgba(124, 58, 237, 0.5);
+    }
+
+    .btn-signup:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+
+    /* Message Alert */
+    #message {
+      margin-top: 20px;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    .text-success {
+      color: #059669 !important;
+      font-weight: 600;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+      padding: 12px 15px;
+      border-radius: 8px;
+      border-left: 4px solid #10b981;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .text-danger {
+      color: #dc2626 !important;
+      font-weight: 600;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+      padding: 12px 15px;
+      border-radius: 8px;
+      border-left: 4px solid #ef4444;
+      display: inline-block;
+      width: 100%;
+    }
+
+    /* Login Link */
+    .login-link {
+      text-align: center;
+      margin-top: 25px;
+      animation: slideIn 0.6s ease-out 0.8s both;
+    }
+
+    .login-link p {
+      color: #4b5563;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .login-link a {
+      color: var(--jambhala-purple);
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .login-link a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(135deg, var(--jambhala-purple), var(--jambhala-indigo));
+      transition: width 0.3s ease;
+    }
+
+    .login-link a:hover {
+      color: var(--jambhala-indigo);
+    }
+
+    .login-link a:hover::after {
+      width: 100%;
+    }
+
+    /* Input Icon Animation */
+    .input-icon {
+      color: var(--jambhala-purple);
+      font-size: 1.3rem;
+      margin-right: 8px;
+    }
+
+    /* Shine Effect */
+    .shine {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shine::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+      .signup-card {
+        padding: 30px 20px;
+      }
+
+      .signup-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .signup-header .emoji {
+        font-size: 2rem;
+      }
+    }
+
+    /* Loading State */
+    .btn-signup:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .btn-signup.loading {
+      pointer-events: none;
+    }
+
+    .spinner-border {
+      width: 20px;
+      height: 20px;
+      border-width: 3px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Particles Background -->
+  <div class="particles" id="particlesContainer"></div>
+
+  <!-- Signup Container -->
+  <div class="signup-container">
+    <!-- Signup Card -->
+    <div class="signup-card shine">
+      <!-- Header -->
+      <div class="signup-header">
+        <div class="emoji">📝</div>
+        <h1>Create Account</h1>
+        <p>Join Quiz Master and start your learning journey</p>
+      </div>
+
+      <!-- Form -->
+      <form id="signupForm">
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="name" class="form-label">
+            <span class="input-icon">👤</span>Full Name
+          </label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="name" 
+            placeholder="Enter your full name" 
+            required
+          >
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <span class="input-icon">📧</span>Email Address
+          </label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="email" 
+            placeholder="Enter your email" 
+            required
+          >
+        </div>
+
+        <!-- Password -->
+        <div class="form-group password-toggle">
+          <label for="password" class="form-label">
+            <span class="input-icon">🔒</span>Password
+          </label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="password" 
+            placeholder="Enter password" 
+            required
+          >
+          <span class="toggle-password" onclick="togglePassword()">👁️</span>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="form-group">
+          <label for="role" class="form-label">
+            <span class="input-icon">🎯</span>I am a:
+          </label>
+          <select class="form-select" id="role" required>
+            <option value="">Select your role</option>
+            <option value="Student">🎓 Student</option>
+            <option value="Quiz Maker">✍️ Quiz Maker</option>
+          </select>
+        </div>
+
+        <!-- Signup Button -->
+        <button type="button" class="btn-signup" onclick="signup()">
+          <span class="emoji-btn">✨</span> Create Account
+        </button>
+      </form>
+
+      <!-- Message -->
+      <div id="message" class="text-center"></div>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        <p>Already have an account? 
+          <a href="login.html">Login here</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Generate animated particles
+    function generateParticles() {
+      const container = document.getElementById('particlesContainer');
+      const particleCount = 50;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.delay = Math.random() * 20 + 's';
+        particle.style.opacity = Math.random() * 0.5 + 0.3;
+        particle.style.animation = `float ${20 + Math.random() * 10}s linear infinite`;
+        container.appendChild(particle);
+      }
+    }
+
+    // Toggle Password Visibility
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const toggleIcon = document.querySelector('.toggle-password');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.textContent = '🙈';
+      } else {
+        passwordInput.type = 'password';
+        toggleIcon.textContent = '👁️';
+      }
+    }
+
+    // Signup Function
+    async function signup() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+      const messageDiv = document.getElementById('message');
+      const signupBtn = document.querySelector('.btn-signup');
+
+      // Validation
+      if (!name || !email || !password || !role) {
+        messageDiv.innerHTML = '<p class="text-danger">❌ Please fill in all fields</p>';
+        return;
+      }
+
+      if (password.length < 6) {
+        messageDiv.innerHTML = '<p class="text-danger">❌ Password must be at least 6 characters</p>';
+        return;
+      }
+
+      // Disable button during submission
+      signupBtn.disabled = true;
+      signupBtn.classList.add('loading');
+      signupBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating Account...';
+
+      try {
+        const response = await fetch('http://localhost:3000/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, email, password, role })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          messageDiv.innerHTML = '<p class="text-success">✅ Account created successfully! Redirecting to login...</p>';
+          signupBtn.innerHTML = '✨ Create Account';
+          
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
+        } else {
+          messageDiv.innerHTML = `<p class="text-danger">❌ ${data.error || 'Signup failed'}</p>`;
+          signupBtn.disabled = false;
+          signupBtn.classList.remove('loading');
+          signupBtn.innerHTML = '✨ Create Account';
+        }
+      } catch (error) {
+        messageDiv.innerHTML = '<p class="text-danger">❌ Connection error. Please try again.</p>';
+        signupBtn.disabled = false;
+        signupBtn.classList.remove('loading');
+        signupBtn.innerHTML = '✨ Create Account';
+      }
+    }
+
+    // Enter key to submit
+    document.getElementById('signupForm').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        signup();
+      }
+    });
+
+    // Initialize particles on load
+    window.addEventListener('load', generateParticles);
+  </script>
+</body>
+</html>
