@@ -492,7 +492,7 @@
 
     async function loadQuiz() {
       try {
-        const res = await fetch(`http://localhost:3000/api/quiz/${quizId}`, {
+        const res = await fetch(`https://smart-quiz-maker-dp44.onrender.com/api/quiz/${quizId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
@@ -605,7 +605,7 @@
             selectedOption: answerIndex !== null ? quiz.questions[qIndex].options[answerIndex] : null
         }));
 
-        const res = await fetch('http://localhost:3000/api/answer/submit', { // ADDED /submit
+        const res = await fetch('https://smart-quiz-maker-dp44.onrender.com/api/answer/submit', { // ADDED /submit
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
