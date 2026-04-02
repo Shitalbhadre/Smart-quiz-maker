@@ -134,7 +134,7 @@
     // We can use a URL parameter like &mode=full
     const isFullMarksheet = urlParams.get('mode') === 'full';
     
-    let url = `https://smart-quiz-maker-dp44.onrender.com/api/answer/leaderboard/${quizId}`;
+    let url = `https://smart-quiz-maker.onrender.com/api/answer/leaderboard/${quizId}`;
 
     const response = await fetch(url, {
       headers: { 'Authorization': `Bearer ${token}` }

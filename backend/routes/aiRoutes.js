@@ -4,6 +4,7 @@ const { authenticate } = require("../middleware/auth");
 const axios = require("axios");
 
 router.post("/generate", authenticate, async (req, res) => {
+  
   try {
     const { prompt } = req.body;
 
